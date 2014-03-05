@@ -1,189 +1,200 @@
-'use strict'
 
 // ng.seed > copyright Adam Kircher > adam.kircher@gmail.com
 // ----------------------------------------------------------------
 // ng.seed loads an ng app based on the directory structure
+
 process.on('uncaughtException', function(err)
 {
 	console.log('UNCAUGHT BY SEED', err.stack)
 })
 
-var fs  = require('fs')
-  , log = require('ng/logger')
-  , pkg = require('../../package.json')
-  , env = process.argv[2] || 'local'
-  , finish  = 0
-  , length  = __dirname.split('/').length + 1
-  , types   =
-   [
-		'animate',
-		'config',
-		'constant',
-		'controller',
-		'directive',
-		'factory',
-		'filter',
-		'provider',
-		'run',
-		'service',
-		'value',
-		'interceptor',
-		'parse',
-		'view'
-   ]
-  , mods = {}
+var types    = {transform:[],interceptor:[],config:[],run:[],node_modules:[],view:[],animate:[],constant:[],controller:[],directive:[],factory:[],filter:[],provider:[],service:[],value:[]}
+var fs       = require('fs')
+var log      = require('ng/logger')
+var env      = process.argv[2] || 'local'
+var depth    = 1
+var pkg      = require('../../package.json')
+var requires = Object.keys(pkg.requires)
+var modules  = {}
 
-process.chdir(__dirname.slice(0, -8))
-//Catch errors that slip through and would cause node to crash
-
+//2300
 //Resursive
-function load(dir)
+!function load(dir)
 {
-	var path    = dir.split('/').slice(length)
-	  , module  = path.shift()
-	  , method  = path.shift()
-
-	function filter(file)
+	fs.readdir(dir, function(err, files)
 	{
-		//exclude hidden files and ng folder
-		if ('.' == file[0] || 'ng.seed' == file)
+		depth--
+
+		var split  = dir.split('/')
+		var parent = split.pop()
+		var module = split.pop()
+
+		//Keep track of our new module and its requires
+		if ('node_modules' == module)
 		{
-			return false
+			modules[parent] = []
 		}
 
-		//already within an angular folder
-		if (method)
+		for (var i in files)
 		{
-			return true
-		}
-
-		//continue recursion only if folder is angular or ng
-		if (module)
-		{
-			return ~ types.indexOf(file)
-		}
-
-		return mods[file] = {}
-	}
-
-	fs.stat(dir, function(err, stat)
-	{
-		if (stat.isFile())
-		{
-			mods[module][method] = mods[module][method] || []
-
-			var body = dir.slice(-3) == '.js' ? require(dir) : fs.readFileSync(dir)
-
-			mods[module][method].push({path:path, body:body})
-
-			if ( ! finish--)
+			//Stop if ng.seed or some system file
+			if ('ng.seed' == files[i] || '.' == files[i][0])
 			{
-				require('ng')(pkg.modules, function(ng)
-				{
-					global.ng = global.angular = ng
-
-					for (var mod in mods)
-					{
-						module = ng.module(mod, Object.keys(mods).concat(Object.keys(pkg.modules)))
-
-						for (var type in mods[mod])
-						{
-							for (var i in mods[mod][type])
-							{
-								var fn = mods[mod][type][i]
-
-								if ('view' == type)
-								{
-									fn.path = fn.path.join('/').slice(0, -5)
-
-									//Mac filenames convert / to : and don't allow : so use $ instead
-									if ('darwin' == process.platform)
-									{
-										fn.path = fn.path.replace(/:/g, '/').replace(/\$/g, ':')
-									}
-
-									fn.body = JSON.stringify(fn.body.toString())
-
-									mods[mod][type][i] = ".when('/"+fn.path+"',{template:"+fn.body+"})"
-								}
-								else
-								{
-									var args = []
-
-									if ('run' != type && 'config' != type && 'interceptor' != type && 'parse' != type)
-									{
-										args = [fn.path.join('').slice(0, -3)]
-									}
-
-									if ('function' == typeof fn.body)
-									{
-										module[type].apply(null, args.concat(fn.body))
-									}
-
-									if (fn.body.client)
-									{
-										module[type].client.apply(null, args.concat(fn.body.client))
-									}
-
-									if (fn.body.server)
-									{
-										module[type].server.apply(null, args.concat(fn.body.server))
-									}
-								}
-							}
-						}
-
-						if (mods[mod].view)
-						{ //Reverse() is a little trick/hack to get more specific routes like donate/:id? to appear before :email?
-							module.config(Function('$routeProvider',  '$routeProvider\n'+mods[mod].view.reverse().join('\n')))
-						}
-					}
-
-					module.config.server(function()
-					{
-						log.gray.bold(' in '+env+' environment')
-
-						for (var i in pkg.ports)
-						{
-							require(pkg.ports[i]).createServer(ng).listen(i)
-							log('listening for '+pkg.ports[i]+' on port '+i)
-						}
-
-						log('')
-					})
-				})
+				continue
 			}
 
-			return
+			//If directory is a dependent, add it to the requires of its parent
+			if ('node_modules' == parent)
+			{
+				depth++; load(dir+'/'+files[i]);
+
+				modules[module].push(files[i])
+
+				continue
+			}
+
+			//Recurse if directory is a special folder
+			if (types[files[i]])
+			{
+				depth++; load(dir+'/'+files[i]);
+
+				continue
+			}
+
+			//require() js files
+			if ( '.js' == files[i].slice(-3))
+			{
+				name = files[i].slice(0, -3)
+
+				data = require(dir+'/'+files[i])
+
+				types[parent].unshift({module:module, name:name, data:data})
+			}
+
+			//readFileSync html files
+			if ('.html' == files[i].slice(-5))
+			{
+				name = files[i].slice(0, -5).replace(/:/g, '/').replace(/\$/g, ':')
+
+				data = fs.readFileSync(dir+'/'+files[i], 'utf8')  //Is there a way to make this async
+
+				types[parent].push({module:module, name:name, data:JSON.stringify(data)})
+			}
 		}
 
-		fs.readdir(dir, function(err, files)
+		! depth && register()
+	})
+}(__dirname.slice(0, -21))
+
+//Now that recursive, asyncronous load is done, let's register the modules in ng
+function register()
+{
+	require('ng')(pkg.modules, function(ng)
+	{
+		//ng is now accessible everywhere!
+		global.ng = ng
+
+		//Register our modules
+		for (var i in modules)
 		{
-			finish--
+			var module = ng.module(i, requires.concat(modules[i]))
+		}
 
-			files.filter(filter).forEach(function(file)
+		for (var i in types)
+		{
+			//views are a concept unique to ng.seed and we have to handle them separately because
+			//the order of the routes matters for which ones take precedence.  We explicily define
+			//the behavior in the specificity function and make sure dependent modules, which are
+			//loaded first don't get precedence in case of conflict
+			if ('view' == i)
 			{
-				finish++
+				var when = ''
 
-				load(dir+'/'+file)
-			})
+				types.view = types.view.sort(specificity).map(function(view)
+				{
+					when += "\n\n.when('/"+view.name+"',{template:"+view.data+"})"
+				})
+
+				module.config(Function('$routeProvider',  "$routeProvider"+when))
+
+				continue
+			}
+
+			var singleArg = Object.keys(types).slice(0, 4)
+
+			for (var j in types[i])
+			{
+				var file = types[i][j]
+
+				var args = ~ singleArg.indexOf(i) ? [] : [file.name]
+
+				var type = ng.module(file.module)[i]
+
+				if ('function' == typeof file.data)
+				{
+					type.apply(null, args.concat(file.data))
+				}
+
+				if (file.data.client)
+				{
+					type.client.apply(null, args.concat(file.data.client))
+				}
+
+				if (file.data.server)
+				{
+					type.server.apply(null, args.concat(file.data.server))
+				}
+			}
+		}
+
+		module.config.server(function()
+		{
+			log.gray.bold(' in '+env+' environment')
+
+			for (var i in pkg.ports)
+			{
+				require(pkg.ports[i]).createServer(ng).listen(i)
+				log('listening for '+pkg.ports[i]+' on port '+i)
+			}
+
+			log('')
 		})
-
-		//fs.watch(dir, {persistent:false}, function(event, file)
-		//{
-		//	//.DS_Store is inadvertantly triggering
-		//	if ('.' == file[0]) return
-		//
-		//	//When reloading, we want the new file not the cached one
-		//	delete require.cache[dir]
-		//
-		//	// to prevent CPU-splsions if saving too fast
-		//	clearTimeout(time)
-		//
-		//	//time = setTimeout(function() { load(dir) }, 500)
-		//})
 	})
 }
 
-//Start loading process
-load(__dirname+'/..')
+//Load the routes of all the modules into the last (most senior) module of the recursion
+//otherwise dependent routes will get predenece over their parents when there is conflict
+//I believe the preferred behavior here is to make the parent get precedence no matter
+//what and only send to the dependent if there is no other option.  Let me know if I'm wrong.
+//For routes in the same module the most specific ones are loaded first '/arg/:arg?' > '/arg' > '/:arg' > '/:arg?'
+function specificity(a, b)
+{
+	function module(type)
+	{
+		return Object.keys(modules).indexOf(type.module)
+	}
+
+	function length(type, split)
+	{
+		return type.name.split(split).length
+	}
+
+	return module(a)     - module(b)
+		 || length(b,'/') - length(a,'/')
+		 || length(a,':') - length(b,':')
+		 || length(a,'?') - length(b,'?')
+}
+
+//fs.watch(dir, {persistent:false}, function(event, file)
+//{
+//	//.DS_Store is inadvertantly triggering
+//	if ('.' == file[0]) return
+//
+//	//When reloading, we want the new file not the cached one
+//	delete require.cache[dir]
+//
+//	// to prevent CPU-splsions if saving too fast
+//	clearTimeout(time)
+//
+//	//time = setTimeout(function() { load(dir) }, 500)
+//})

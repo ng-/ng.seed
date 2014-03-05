@@ -4,16 +4,23 @@
 // ----------------------------------------------------------------
 // ng.seed loads an ng app based on the directory structure
 
-var log = require('./node_modules/ng/logger')
-  , fs  = require('fs')
+//Only run install script on fresh install, not when a dependency
+//is there a better way to check this (an npm flag within process?)
+
+var fs  = require('fs')
+  , log = require('./node_modules/ng/logger')
   , rl  = require('readline').createInterface(process.stdin, process.stdout)
+  , pkg = fs.existsSync('../../package.json') && require('../../package.json')
 
-log.bold.gray("Welcome to ng.seed!")
-
-install()
-
-function install()
+if (pkg.dependencies && pkg.dependencies['ng.seed'])
 {
+	process.exit()
+}
+
+!function install()
+{
+	log.bold.gray("Welcome to ng.seed!")
+
 	rl.question("What would you like to name your application? ", function(name)
 	{
 		fs.mkdir('../'+name, {flag:'wx'}, function(err)
@@ -34,8 +41,8 @@ function install()
 					author: {name:'ng.seed'},
 					modules:
 					{
-						ng:'https://raw.github.com/angular/bower-angular/master/angular.js',
-						ngRoute:'https://raw.github.com/angular/bower-angular-route/master/angular-route.js'
+						ng:'http://code.angularjs.org/snapshot/angular.js',
+						ngRoute:'http://code.angularjs.org/snapshot/angular-route.js'
 					},
 					ports: {1337:'http'},
 					main:'node_modules/ng.seed/index.js'
@@ -56,4 +63,4 @@ function install()
 			})
 		})
 	})
-}
+}()

@@ -1,6 +1,7 @@
 # ng.seed (warning! pre-alpha)
 ### create a modular ng application
 
+Harness the power of npm dependencies and environments
 Create a modular ng application using npm packages.  ng.seed enables you to organize and share modules written for the ng framework using npm packages.  Simply download an ng.seed module (any npm package with an “ng.” prefix) into your application’s node_modules folder as a dependency and it will be automatically be loaded when you start your application.
 
 ## how it works
