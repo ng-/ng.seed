@@ -89,7 +89,7 @@ var modules  = {}
 //Now that recursive, asyncronous load is done, let's register the modules in ng
 function register()
 {
-	require('ng')(pkg.modules, function(ng)
+	require('ng')(pkg.requires, function(ng)
 	{
 		//ng is now accessible everywhere!
 		global.ng = ng
