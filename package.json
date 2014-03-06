@@ -5,7 +5,7 @@
     "name": "Adam Kircher"
   },
   "email": "adam.kircher@gmail.com",
-  "version": "0.0.1-experimental1",
+  "version": "0.0.1-experimental9",
   "scripts": {
     "install": "node install.js"
   },
