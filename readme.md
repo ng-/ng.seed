@@ -8,9 +8,9 @@ ng.seed aims to make it dead simple to create a modular application using the [n
 - You want to have simple environmental settings & run on all your server's cores
 
 ## getting started
-ng.seed assumes that you have node & npm installed.  If you don't, then [go here](https://gist.github.com/isaacs/579814) or do the following:
+ng.seed assumes that you have node installed.  If you don't, then [go here](https://gist.github.com/isaacs/579814) or do the following:
 
-INSTALL:
+ON INSTALL:
 ```shell
 # download nave, a node version management tool
 wget http://github.com/isaacs/nave/raw/master/nave.sh
@@ -21,17 +21,17 @@ sudo chmod 755 /usr/local/bin/nave
 # Point command line’s “nave” to run the script
 sudo ln -s $PWD/nave.sh /usr/local/bin/nave
 ```
-ON EVERY LOGIN:
+ON LOGIN:
 ```shell
 # start virtual environment that defines node & npm
 nave use stable
 
 # do whatever you want with node & npm, for example:
-npm install <project-name>
+npm install ng.myProject
 
-node node_modules/<project-name>
+node node_modules/ng.myProject
 
-# return to non-nave-land
+# exit the virtual environment
 exit
 ```
 ####Note about running as root:
@@ -60,18 +60,18 @@ As with ng, the default is identical client & server behavior.  To exert more fi
 ```javascript
 exports.client = function(dependency1, dependency2)
 {
-	return //I do something completely different than the server
+	return //injecting "example" on client is completely different than on the server
 }
 
 exports.server = function(dependency3, dependency4)
 {
-	return //I do something completely different than the client
+	return //injecting "example" on server is completely different than on the client
 }
 ```
 
 ## dependencies
 
-To use a third-party ng library simply add it to your package.json as a dependency or have npm do it for you by using npm install --save <package-name>
+To use a third-party ng library simply add it to your package.json as a dependency or have npm do it for you by using `npm install --save <package-name>`
 
 ## environment
 
@@ -79,11 +79,11 @@ Start your project with node `<app>` `<env>` where `<app>` is the name that you 
 
 ## config
 
-By default, ng.seed loads the bleeding-edge of angular on http port 1337.  Edit your projects package.json if you wish to stay on a particular version (highly recommended for production) or change the default protocol/port.
+By default, ng.seed loads the bleeding-edge of angular on `http port 1337`.  Edit your projects package.json if you wish to stay on a particular version (highly recommended for production) or change the default protocol/port.
 
 ## sharing
 
-Please publish the ng.seed modules that you wish to share using the “ng.” prefix. Creating an “ng” namespace within npm will prove to be a helpful convention for ng.seed developers
+Please publish the ng.seed modules that you wish to share using the `ng.` prefix. Creating an “ng” namespace within npm will prove to be a helpful convention for ng.seed developers
 
 ## todos
 - Documentation: explain Global ng Var
