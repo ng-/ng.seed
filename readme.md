@@ -1,16 +1,17 @@
 # ng.seed: create a modular [ng app](https://github.com/ng-/ng)
 ng.seed aims to make it dead simple to create a modular application using the [ng framework](https://github.com/ng-/ng)
 
-**ng is right for you if:**
-- You want to use npm as a package manager to create, organize, & share your modules
+###ng is right for you if:
+- You want to use npm as a package manager to create, organize, & share ng modules
 - You want access to an ecosystem of npm packages (anything with an “ng.” prefix)
 - You want a modular application with a matching directory structure
 - You want to have simple environmental settings & run on all your server's cores
 
-### getting started
+## getting started
 ng.seed assumes that you have node & npm installed.  If you don't, then [go here](https://gist.github.com/isaacs/579814) or do the following:
-```javascript
+
 INSTALL:
+```shell
 # download nave, a node version management tool
 wget http://github.com/isaacs/nave/raw/master/nave.sh
 
@@ -19,8 +20,9 @@ sudo chmod 755 /usr/local/bin/nave
 
 # Point command line’s “nave” to run the script
 sudo ln -s $PWD/nave.sh /usr/local/bin/nave
-
+```
 ON EVERY LOGIN:
+```shell
 # start virtual environment that defines node & npm
 nave use stable
 
@@ -32,11 +34,13 @@ node node_modules/<project-name>
 # return to non-nave-land
 exit
 ```
-Note about running as root:
+####Note about running as root:
 Don’t install or run nave/node/npm as root because of security vulnerabilities. When not root, the only thing you won’t be able to do is listen on ports less than 1024.  Listen on a port > 1024 and use ip-table to forward ports 80 & 443 to the ones your server is actually listening to
 
 ## how it works
-ng.seed uses your directory structure to organize and load your ng application. Each folder in node_modules becomes an ng module.  Files contained within subdirectories named 'animate', 'config', 'constant', 'controller', 'directive', 'factory', 'filter', 'provider', 'run', 'service', 'value', 'stack', 'parse' of the modules will be loaded into  angular automatically as that type. If the module contains additional modules in its node_modules folder, then those modules are also loaded and their names are automatically entered into the module's "requires" array.  Other folders within a module will be ignored.
+ng.seed uses your directory structure to organize and load your ng application. Each folder in node_modules becomes an ng module. If the module contains additional modules in its node_modules folder, then those modules are also loaded and their names are automatically entered into the module's "requires" array.
+
+Files contained within subdirectories named 'animate', 'config', 'constant', 'controller', 'directive', 'factory', 'filter', 'provider', 'run', 'service', 'value', 'stack', 'parse' of the modules will be loaded into  angular automatically as that type. Other folders within a module will be ignored.
 
 The name provided to ng will be the name of the file. For example, myapp/node_modules/module1/factory/example.js will be registered as ng.module(‘module1’, []).factory(‘example’, `<code>`)
 
@@ -66,6 +70,7 @@ exports.server = function(dependency3, dependency4)
 ```
 
 ## dependencies
+
 To use a third-party ng library simply add it to your package.json as a dependency or have npm do it for you by using npm install --save <package-name>
 
 ## environment
