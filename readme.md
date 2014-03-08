@@ -1,7 +1,7 @@
-# ng.seed: create a modular [ng application](https://github.com/ng-/ng)
+# ng.seed: create a modular [ng app](https://github.com/ng-/ng)
 ng.seed aims to make it dead simple to create a modular application using the [ng framework](https://github.com/ng-/ng)
 
-*ng is right for you if:*
+**ng is right for you if:**
 - You want to use npm as a package manager to create, organize, & share your modules
 - You want access to an ecosystem of npm packages (anything with an “ng.” prefix)
 - You want a modular application with a matching directory structure
