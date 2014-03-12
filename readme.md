@@ -30,10 +30,9 @@ ng.seed aims to make it dead simple to create a modular application using the [n
 	- `myProject/node_modules/ng.seed/node_modules/ng` the ng framework
 
 **5. Start your application**
-
+```bash
 		node node_modules/myProject <environment>
-
-
+```
 	`<environment>` is available inside your application as `process.env.NODE_ENV`
 
 	In the browser, `http://localhost:1080` should now display "Welcome to ng.seed!"
