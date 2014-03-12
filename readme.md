@@ -16,7 +16,7 @@ ng.seed aims to make it dead simple to create a modular application using the [n
 
 	This will install and use the latest stable version of node, to specify a version edit `~/.bashrc`
 
-3. Goto the diretory where you want your application, and install ng.seed
+3. **Goto the directory where you want your application, and install ng.seed**
 
 		npm install ng-/ng.seed
 
@@ -29,7 +29,7 @@ ng.seed aims to make it dead simple to create a modular application using the [n
 	- `myProject/node_modules/ng.seed` this loads your modules
 	- `myProject/node_modules/ng.seed/node_modules/ng` the ng framework
 
-5. Start your application
+**5. Start your application**
 
 		node node_modules/myProject <environment>
 
