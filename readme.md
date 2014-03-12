@@ -25,9 +25,9 @@ ng.seed aims to make it dead simple to create a modular application using the [n
 		What would you like to name your application? myProject
 
 	Answering `myProject` would create the following
-	- `myProject/package.json` (this is your config file)
-	- `myProject/node_modules/ng.seed` (this loads your modules)
-	- `myProject/node_modules/ng.seed/node_modules/ng` (the ng framework)
+	- `myProject/package.json` this is your config file
+	- `myProject/node_modules/ng.seed` this loads your modules
+	- `myProject/node_modules/ng.seed/node_modules/ng` the ng framework
 
 5. Start your application
 
@@ -53,26 +53,25 @@ ng.seed aims to make it dead simple to create a modular application using the [n
 
 	All ng.seed dependencies should begin with an `ng.` prefix
 
-9. Build your application using this readme.md as a guide
-
-10. Share your application with others!
+9. Build your application using this guide & then share it with others!
 
 		npm publish myProject
 
 ## how it works
-ng.seed uses your directory structure to organize and load your ng application. The easiest way to learn is to explore one of the existing projects listed at the end of this readme.
+ng.seed uses your directory structure to organize and load your ng application. The easiest way to learn ng.seed is to explore one of the existing projects built with it listed at the end of this readme.
 
-Starting in `myProject` ng.seed recursively search for folders named `node_modules`. Each of these folders becomes an ng module. If a module contains modules in its `node_modules` folder, then those modules are loaded and their names are automatically entered into the parent module's "requires" array.
+Starting in `myProject`, ng.seed recursively searches for folders named `node_modules`. Each of these folders becomes an ng module. If a module contains has a `node_modules` folder, then those module's dependencies are loaded and their names are automatically entered into the parent module's "requires" array.
 
-Each module can contain any number of files and folders, however, folder's named after an ng service (e.g., `animate`, `config`, `constant`, `controller`, `directive`, `factory`, `filter`, `provider`, `run`, `service`, `value`, `stack`, `parse`) will have their files loaded into ng as that type.
+Each module can contain any number of files and folders, however, folders named after an ng service (e.g., `animate`, `config`, `constant`, `controller`, `directive`, `factory`, `filter`, `provider`, `run`, `service`, `value`, `stack`, `parse`) will have their files registered into your ng application as that type.
 
-ng.seed will use the name of the file as the name it registers with ng. For example, `myapp/node_modules/module1/factory/example.js` will be registered as `ng.module('module1', []).factory('example', <code>)`
+ng.seed will use the filename without the extension as the name it registers with ng. For example, `myProject/node_modules/module1/factory/example.js` would be registered as `ng.module('module1', []).factory('example', <code in module.exports>)` and module1 would be entered into `myProject` module's requires array.
 
-You define services much like you would in node.js or angular.  For example in `myapp/node_modules/module1/factory/example.js`
+You define services much like you would in node.js or angular.  For example in `myProject/factory/example.js`
 ```javascript
 module.exports = function(dependency1, dependency2)
 {
-	//I am initialization code that runs only once, the first time that this factory is injected
+	// I am initialization code that runs only once
+	// the first time that this factory is injected
 
 	return {
 		// I am the object that is available to service that injected me
@@ -94,10 +93,15 @@ exports.server = function(dependency3, dependency4)
 ```
 
 ## dependencies
-To use a third-party ng library simply add it to your `package.json` as a dependency.  When you publish your project as a dependency, please use the "ng." prefix.  Preserving this namespace is helpful for other developers to discover your project.
+To use a third-party ng module simply add the module to your application's `node_modules` folder and - if you plan to publish your application - add it as a dependency to your `package.json`.  If you publish your own project as a dependency, please use the "ng." prefix.  Preserving this namespace is helpful for other developers to discover your project.
 
 ## config
-All config options are contained in your project's `package.json`. By default, ng.seed loads the bleeding-edge of angular on `http port 1080`.  Edit `package.json` if you wish to stay on a particular version (google's cdn is highly recommended for production), change the location/prefix of your log files, or change the default protocol/port.
+All config options are contained in your project's `package.json`. By default, ng.seed loads the bleeding-edge of angular on `http port 1080`.  Edit your `package.json` if you wish to stay on a particular version.  For example:
+		"requires": {
+			"ng": 	  "//ajax.googleapis.com/ajax/libs/angularjs/1.2.12/angular.min.js",
+			"ngRoute": "//ajax.googleapis.com/ajax/libs/angularjs/1.2.12/angular-route.min.js"
+		}
+Using google's cdn is highly recommended for production.  Other configuration options include changing the path and/or prefix of your log files, or changing your application's default protocol/port.
 
 ## running as root
 Don’t install or run nave/node/npm as root because of security vulnerabilities. When not root, the only thing you won’t be able to do is listen on ports less than 1024.  Instead, listen on a port > 1024 (e.g., the default is 1080 for http and 1443 for https) and use ip-table to forward ports 80 & 443 to the ones your server is actually listening to
@@ -107,6 +111,9 @@ Don’t install or run nave/node/npm as root because of security vulnerabilities
 - Added automatic daemon functionality
 - Added log file config to package.json
 - Refactored code into separate files
+
+### experimental1
+- Initial commit
 
 ## todos
 - Environment based Config
