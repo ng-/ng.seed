@@ -94,14 +94,18 @@ exports.server = function(dependency3, dependency4)
 To use a third-party ng module simply add the module to your application's `node_modules` folder and - if you plan to publish your application - add it as a dependency to your `package.json`.  Do both at the same time with `npm install myProject --save <dependency>`. If you publish your own project as a dependency, please use the "ng." prefix.  Preserving this namespace is helpful for other developers to discover your project.
 
 ## config
-All config options are contained in your project's `package.json`. Although core angular is the only external module required - to get you started quickly - ng.seed loads both the bleeding-edge of angular from `http://code.angularjs.org/snapshot/angular.js` and angular route from `http://code.angularjs.org/snapshot/angular-route.js`. Edit your `package.json` if you wish to stay on a particular version.  For example:
-		"requires": {
-			"ng": 	  "//ajax.googleapis.com/ajax/libs/angularjs/1.2.12/angular.min.js",
-			"ngRoute": "//ajax.googleapis.com/ajax/libs/angularjs/1.2.12/angular-route.min.js"
-		}
-Using google's cdn is highly recommended for production. Add or remove ngRoute, ngAnimate, ngCookies, ngSanitize, ngTouch and any other *precompiled* angular modules (i.e., not ng) - such as angular-ui's bootstrap or angular's firebase bindings - to this option. Other configuration options include changing the path and/or prefix of your log files, or changing your application's default protocol/port from  `http port 1080`.
+All config options are contained in your project's `package.json`. Although core angular is the only external module required - to get you started quickly - ng.seed loads both the bleeding-edge of angular from `http://code.angularjs.org/snapshot/angular.js` and angular route from `http://code.angularjs.org/snapshot/angular-route.js`.
 
-## running as root
+Edit your `package.json` if you wish to stay on a particular version. Using google's cdn is highly recommended for production. For example
+```javascript
+	"requires": {
+		"ng": 	  "//ajax.googleapis.com/ajax/libs/angularjs/1.2.12/angular.min.js",
+		"ngRoute": "//ajax.googleapis.com/ajax/libs/angularjs/1.2.12/angular-route.min.js"
+	}
+```
+Add or remove ngRoute, ngAnimate, ngCookies, ngSanitize, ngTouch and any other *precompiled* angular modules (i.e., not ng) - such as angular-ui's bootstrap or angular's firebase bindings - to this option. Other configuration options include changing the path and/or prefix of your log files, or changing your application's default protocol/port from  `http port 1080`.
+
+## run as root
 Don’t install or run nave/node/npm as root because of security vulnerabilities. When not root, the only thing you won’t be able to do is listen on ports less than 1024.  Instead, listen on a port > 1024 (e.g., the default is `1080` for `http` and `1443` for `https`) and use ip-table to forward ports 80 & 443 to the ones your server is actually listening to
 
 ## changelog
