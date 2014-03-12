@@ -8,7 +8,7 @@ ng.seed aims to make it dead simple to create a modular application using the [n
 - You want to have simple environmental settings & run on all your server's cores
 
 ## getting started
-1. **At the command prompt, install [node](http://nodejs.org/api/) if you haven't yet. [Install it manually](https://gist.github.com/isaacs/579814) or with this command:**
+1. **At the command prompt, install [node](http://nodejs.org/api/) if you haven't yet. Install [manually](https://gist.github.com/isaacs/579814) or using:**
 
 		curl http://github.com/ng-/ng.seed/raw/master/node.sh | sh
 
@@ -33,7 +33,7 @@ ng.seed aims to make it dead simple to create a modular application using the [n
 
 	`<environment>` is available inside your application as `process.env.NODE_ENV` and `process.argv[3]`
 
-	In the browser, `http://localhost:1080` should now display "Welcome to ng.seed!"
+	In the browser, `http://localhost:1080` should now display *"Welcome to ng.seed!"*
 
 5. **Continue application in background as a daemon**
 
@@ -58,13 +58,13 @@ ng.seed aims to make it dead simple to create a modular application using the [n
 ## how it works
 ng.seed uses your directory structure to organize and load your ng application. The easiest way to learn ng.seed is to explore one of the existing projects built with it listed at the end of this readme.
 
-Starting in `myProject`, ng.seed recursively searches for folders named `node_modules`. Each of these folders becomes an ng module. If a module contains has a `node_modules` folder, then those module's dependencies are loaded and their names are automatically entered into the parent module's "requires" array.
+Starting in `myProject`, ng.seed recursively searches for folders named `node_modules`. Each of these folders becomes an ng module. If a module has a `node_modules` folder, then those dependencies are loaded and their names are automatically entered into the parent module's "requires" array.
 
 Each module can contain any number of files and folders, however, folders named after an ng service (e.g., `animate`, `config`, `constant`, `controller`, `directive`, `factory`, `filter`, `provider`, `run`, `service`, `value`, `stack`, `parse`) will have their files registered into your ng application as that type.
 
-ng.seed will use the filename without the extension as the name it registers with ng. For example, `myProject/node_modules/module1/factory/example.js` would be registered as `ng.module('module1', []).factory('example', <code in module.exports>)` and module1 would be entered into `myProject` module's requires array.
+ng.seed will use the filename without the extension as the name it registers with ng. For example, `myProject/node_modules/module1/factory/example.js` would register myProject as `ng.module('myProject', ['module1']), `module1 as `ng.module('module1', [])`, example.js as `ng.module('module1').factory('example', <module.exports>)`.
 
-You define services much like you would in node.js or angular.  For example in `myProject/factory/example.js`
+You define services much like you would in node.js or angular.  To elaborate on the example above, `myProject/factory/example.js` could look like this
 ```javascript
 module.exports = function(dependency1, dependency2)
 {
