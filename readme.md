@@ -8,9 +8,9 @@ ng.seed aims to make it dead simple to create a modular application using the [n
 - You want to have simple environmental settings & run on all your server's cores
 
 ## getting started
-1. Goto to your favorite command prompt or terminal program
+1. **Goto to your favorite command prompt or terminal program**
 
-2. Install [node](http://nodejs.org/api/) if you haven't yet. [Install it manually](https://gist.github.com/isaacs/579814) or with this command:
+2. **Install [node](http://nodejs.org/api/) if you haven't yet. [Install it manually](https://gist.github.com/isaacs/579814) or with this command:**
 
 		curl http://github.com/ng-/ng.seed/raw/master/node.sh | sh
 
@@ -20,7 +20,7 @@ ng.seed aims to make it dead simple to create a modular application using the [n
 
 		npm install ng-/ng.seed
 
-4. Upon successful installation, you will be prompted to name your application
+4. **Upon successful installation, you will be prompted to name your application**
 
 		What would you like to name your application? myProject
 
@@ -29,31 +29,31 @@ ng.seed aims to make it dead simple to create a modular application using the [n
 	- `myProject/node_modules/ng.seed` this loads your modules
 	- `myProject/node_modules/ng.seed/node_modules/ng` the ng framework
 
-**5. Start your application**
-```bash
+5. **Start your application**
+
 		node node_modules/myProject <environment>
-```
+
 	`<environment>` is available inside your application as `process.env.NODE_ENV`
 
 	In the browser, `http://localhost:1080` should now display "Welcome to ng.seed!"
 
-6. Continue application in background as a daemon
+6. **Continue application in background as a daemon**
 
 		ctrl-c
 
 	Input and output will now be redirected from the terminal to the log files specified in `package.json`
 
-7. Quit or restart your application
+7. **Quit or restart your application**
 
 		node myProject stop|restart
 
-8. Install modules as dependencies
+8. **Install modules as dependencies**
 
 		npm install myProject --save <dependency>
 
 	All ng.seed dependencies should begin with an `ng.` prefix
 
-9. Build your application using this guide & then share it with others!
+9. **Build your application using this guide & then share it with others!**
 
 		npm publish myProject
 
