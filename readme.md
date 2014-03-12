@@ -8,31 +8,46 @@ ng.seed aims to make it dead simple to create a modular application using the [n
 - You want to have simple environmental settings & run on all your server's cores
 
 ## getting started
-ng.seed assumes that you have node installed.  If you don't, then [go here](https://gist.github.com/isaacs/579814) or do the following:
-
-ON INSTALL:
+- If you need to install [node](http://nodejs.org/api/) then [install it manually](https://gist.github.com/isaacs/579814) or do the following:
 ```shell
-# download nave, a node version management tool
-wget http://github.com/isaacs/nave/raw/master/nave.sh
-
-# give yourself permission to run the script
-sudo chmod 755 /usr/local/bin/nave
-
-# Point command line’s “nave” to run the script
-sudo ln -s $PWD/nave.sh /usr/local/bin/nave
+curl http://github.com/ng-/ng.seed/raw/master/node.sh | sh
 ```
-ON LOGIN:
+
+- Goto the diretory where you want your application installed
+
+- Install ng.seed
 ```shell
-# start virtual environment that defines node & npm
-nave use stable
+npm install ng-/ng.seed
+```
 
-# do whatever you want with node & npm, for example:
-npm install ng.myProject
+- Name your application
+```shell
+What would you like to name your application?
+```
 
-node node_modules/ng.myProject
+Answering `myProject` would create the following
+- myProject/package.json (modify this as you need)
+- myProject/node_modules/ng.seed (this loads your modules)
+- myProject/node_modules/ng.seed/node_modules/ng (the ng framework)
 
-# exit the virtual environment
-exit
+- Build your application and install modules as dependencies
+```shell
+npm install myProject --save ng.crud  //this dependency is a fully working example app to explore
+```
+
+- start your application
+```shell
+node node_modules/myProject <env>
+```
+
+- continue application as a daemon
+```shell
+ctrl-c
+```
+
+- end your application
+```shell
+node myProject stop|restart
 ```
 ####Note about running as root:
 Don’t install or run nave/node/npm as root because of security vulnerabilities. When not root, the only thing you won’t be able to do is listen on ports less than 1024.  Listen on a port > 1024 and use ip-table to forward ports 80 & 443 to the ones your server is actually listening to
@@ -75,15 +90,21 @@ To use a third-party ng library simply add it to your package.json as a dependen
 
 ## environment
 
-Start your project with node `<app>` `<env>` where `<app>` is the name that you are prompted to choose during installation and `<env>` is local, test, or live.  If `<env>` is omitted it will default to local.
+Start your project with node `<path/to/app>` `<env>` where `app` is the name that you are prompted to choose during installation and `<env>` is NODE_ENV. Additional arguments can be passed and will be available to your app in the process.argv array
 
 ## config
 
-By default, ng.seed loads the bleeding-edge of angular on `http port 1337`.  Edit your projects package.json if you wish to stay on a particular version (highly recommended for production) or change the default protocol/port.
+By default, ng.seed loads the bleeding-edge of angular on `http port 1080`.  Edit your projects package.json if you wish to stay on a particular version (google's cdn is highly recommended for production) or change the default protocol/port.
 
 ## sharing
 
 Please publish the ng.seed modules that you wish to share using the `ng.` prefix. Creating an “ng” namespace within npm will prove to be a helpful convention for ng.seed developers
+
+## changelog
+### experimental2
+- Added automatic daemon functionality
+- Added log file config to package.json
+- Refactored code into separate files
 
 ## todos
 - Documentation: explain Global ng Var
@@ -91,3 +112,11 @@ Please publish the ng.seed modules that you wish to share using the `ng.` prefix
 - Use fs.watch to do automatic reloads
 - Use the cluster module to run multi-thread
 - Figure out where to put and how to format env specific config options
+
+## related projects
+- [ng](https://github.com/ng-/ng): ng: angular reimagined
+- [ng.data](https://github.com/ng-/ng.data): simple getter/setter for data persistence
+- ng.cql: realtime cassandra database syncing
+- [ng.auth](https://github.com/ng-/ng.auth): example authentication using ng interceptors
+- [ng.crud](https://github.com/ng-/ng.crud): example demonstrating a simple crud application using ng.seed
+- [ng.style](https://github.com/ng-/ng.style): alert and input helpers for use with twitter bootstrap
