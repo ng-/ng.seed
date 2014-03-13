@@ -4,9 +4,9 @@
 wget https://raw.github.com/isaacs/nave/master/nave.sh
 
 # install latest stable version of node & npm
-./nave use stable
+./nave.sh use stable
 
-#move installation script out of the way
+#move script into the new intallation folder
 mv nave.sh .nave/nave.sh
 
 # Make 'nave' command work without specifying a path
