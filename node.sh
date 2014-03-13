@@ -19,7 +19,7 @@ nave use stable
 echo 'nave use stable' >> ~/.bashrc
 
 # this is where the magic will happen
-mkdir ../node_modules && cd ../node_modules
+cd ../ && mkdir node_modules && cd node_modules
 
 #Show user thank you message
-echo 'ng.seed installed node. Use "rm -R .nave" to delete'
+echo 'ng.seed installed node & npm'
