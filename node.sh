@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # let nave do all the hard work in a hidden directory
-mkdir .node && cd .node
+mkdir .nave && cd .nave
 
 # download nave, a node version management tool
 wget https://raw.github.com/isaacs/nave/master/nave.sh
@@ -22,4 +22,4 @@ echo 'nave use stable' >> ~/.bashrc
 mkdir ../node_modules && cd ../node_modules
 
 #Show user thank you message
-echo 'ng.seed installed node. Use "rm -R .node" to delete'
+echo 'ng.seed installed node. Use "rm -R .nave" to delete'
