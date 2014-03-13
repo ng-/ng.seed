@@ -64,6 +64,7 @@ Each module can contain any number of files and folders, however, folders named 
 
 ng.seed will use the filename without the extension as the name it registers with ng. For example, `myProject/node_modules/module1/factory/example.js` would register myProject as `ng.module('myProject', ['module1'])`, module1 as `ng.module('module1', [])`, and - finally - example.js as `ng.module('module1').factory('example', <module.exports>)`.
 
+## define services
 You define services much like you would in node.js or angular.  To elaborate on the example above, `myProject/factory/example.js` could look like this
 ```javascript
 module.exports = function(dependency1, dependency2)
@@ -91,7 +92,7 @@ exports.server = function(dependency3, dependency4)
 ```
 
 ## dependencies
-To use a third-party ng module simply add the module to your application's `node_modules` folder and - if you plan to publish your application - add it as a dependency to your `package.json`.  Do both at the same time with `npm install myProject --save <dependency>`. If you publish your own project as a dependency, please use the "ng." prefix.  Preserving this namespace is helpful for other developers to discover your project.
+There are two type of dependencies: regular angular modules and ng modules.  To load regular angular modules use the `requires` property in your `package.json` as described in the **config** section of this readme. To use a third-party ng module simply add that module to your application's `node_modules` folder and - if you plan to publish your application - add it as a dependency to your `package.json`.  Easily do both at the same time with the command `npm install myProject --save <dependency>`. If you publish your own project as a dependency, please use the "ng." prefix.  Preserving this namespace is helpful for other developers to discover your project.
 
 ## config
 All config options are contained in your project's `package.json`. Although core angular is the only external module required - to get you started quickly - ng.seed loads both the bleeding-edge of angular from `http://code.angularjs.org/snapshot/angular.js` and angular route from `http://code.angularjs.org/snapshot/angular-route.js`.
@@ -109,12 +110,12 @@ Add or remove ngRoute, ngAnimate, ngCookies, ngSanitize, ngTouch and any other *
 Don’t install or run nave/node/npm as root because of security vulnerabilities. When not root, the only thing you won’t be able to do is listen on ports less than 1024.  Instead, listen on a port > 1024 (e.g., the default is `1080` for `http` and `1443` for `https`) and use ip-table to forward ports 80 & 443 to the ones your server is actually listening to
 
 ## changelog
-### experimental2
+#### 0.0.0-rc2
 - Added automatic daemon functionality
 - Added log file config to package.json
 - Refactored code into separate files
 
-### experimental1
+#### 0.0.0-rc1
 - Initial commit
 
 ## todos
