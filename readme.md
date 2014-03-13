@@ -10,13 +10,13 @@ ng.seed aims to make it dead simple to create a modular application using the [n
 ## getting started
 1. *At the command prompt, install [node](http://nodejs.org/api/) if you haven't yet. Install [manually](https://gist.github.com/isaacs/579814) or using:*
 
-		curl http://github.com/ng-/ng.seed/raw/master/node.sh | sh
+		curl https://raw.github.com/ng-/ng.seed/master/node.sh | sh
 
 	This will install and use the latest stable version of node, to specify a version edit `~/.bashrc`
 
 2. *Goto the directory where you want your application, and install ng.seed*
 
-		npm install ng-/ng.seed
+		npm install ng.seed
 
 3. *Upon successful installation, you will be prompted to name your application*
 
@@ -130,8 +130,6 @@ Since view's have no way of registering a controller with $routeProvider directl
 
 ## todos
 - Environment based Config
-- Override $apply $digest on server for performance?
-- Better Error stacks, like long-stack-trace
 - Documentation: explain Global ng Var
 - Duplication detection before overwrite
 - Use fs.watch to do automatic reloads
@@ -143,4 +141,4 @@ Since view's have no way of registering a controller with $routeProvider directl
 - ng.cql: realtime cassandra database syncing
 - [ng.auth](https://github.com/ng-/ng.auth): example authentication using ng interceptors
 - [ng.crud](https://github.com/ng-/ng.crud): example demonstrating a simple crud application using ng.seed
-- [ng.style](https://github.com/ng-/ng.style): alert and input helpers for use with twitter bootstrap
+- [ng.style](https://github.com/ng-/ng.style): beautiful html using twitter bootstrap
