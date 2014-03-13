@@ -109,6 +109,16 @@ Add or remove ngRoute, ngAnimate, ngCookies, ngSanitize, ngTouch and any other *
 ## run as root
 Don’t install or run nave/node/npm as root because of security vulnerabilities. When not root, the only thing you won’t be able to do is listen on ports less than 1024.  Instead, listen on a port > 1024 (e.g., the default is `1080` for `http` and `1443` for `https`) and use ip-table to forward ports 80 & 443 to the ones your server is actually listening to
 
+##views
+In order to work, views require ngRoute to be loaded in `package.json`. ng.seed provide a shortcut to defining routes by parsing the filenames in the `view` folder.  By placing an `.html` file in the `view` folder, ng.seed will know to add that file to $routeProvider as a template.  The route given for that template will be the view's filename - with `$` replaced with `:` since `:` character is not allowed to be used in the filename of many Operating Systems. For example, `myProject/view` may contain a file named `i/am/$a/$route?/that/will/$be*/registered.html` which ng.seed will add as
+```javascript
+ng.module('myProject').config(function($routeProvider)
+{
+	$routeProvider.when('i/am/:a/:route?/that/will/:be*/registered', {template:<html>})
+})
+```
+Since view's have no way of registering a controller with $routeProvider directly, you will need to specify the controller within the view using angular's ngController directive.
+
 ## changelog
 #### 0.0.0-rc2
 - Added automatic daemon functionality
