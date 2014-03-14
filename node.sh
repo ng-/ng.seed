@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # let nave do all the hard work in a hidden directory
-mkdir -p .nave && cd .nave
+mkdir -p .nave; cd .nave
 
 # download nave, a node version management tool
 wget https://raw.github.com/isaacs/nave/master/nave.sh
@@ -19,7 +19,7 @@ nave use stable
 echo 'nave use stable' >> ~/.bashrc
 
 # this is where the magic will happen
-cd ../ && mkdir -p node_modules && cd node_modules
+cd ../ && mkdir -p node_modules; cd node_modules
 
 #Show user thank you message
 echo 'ng.seed installed node & npm'
