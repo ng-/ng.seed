@@ -16,7 +16,7 @@ ng.seed aims to make it dead simple to create a modular application using the [n
 
 2. *Goto the directory where you want your application, and install ng.seed*
 
-		npm install ng.seed
+		npm install ng.seed -or if you have git install- npm install ng-/ng.seed
 
 3. *Upon successful installation, you will be prompted to name your application*
 
