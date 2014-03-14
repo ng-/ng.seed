@@ -1,5 +1,3 @@
-#!/bin/bash
-
 # let nave do all the hard work in a hidden directory
 mkdir .nave && cd .nave
 
