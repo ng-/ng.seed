@@ -6,17 +6,15 @@ mkdir -p .nave && cd .nave
 # download nave, a node version management tool
 wget https://raw.github.com/isaacs/nave/master/nave.sh
 
-# Point command line’s “nave” to run the script
+# point command line’s “nave” to run the script
 sudo ln -s $PWD/nave.sh /usr/local/bin/nave
 
-# give yourself permission to run the script
-sudo chmod 755 /usr/local/bin/nave
+# create necessary folders and take ownership
+sudo mkdir -p /usr/local/{share/man,bin,lib/node,include/node}
+sudo chown -R $USER /usr/local/{share/man,bin,lib/node,include/node}
 
 # starts virtual environment with node & npm
-nave use stable
-
-# start environment on future logins as well
-echo 'nave use stable' >> ~/.bashrc
+nave usemain stable
 
 # this is where the magic will happen
 cd ../ && mkdir -p node_modules && cd node_modules
