@@ -10,9 +10,9 @@ ng.seed aims to make it dead simple to create a modular application using the [n
 ## getting started
 1. *At the command prompt, install [node](http://nodejs.org/api/) if you haven't yet. Install [manually](https://gist.github.com/isaacs/579814) or using:*
 
-		source /dev/stdin <<< "$(curl https://raw.github.com/ng-/ng.seed/master/node.sh)"
+		. <(curl https://raw.github.com/ng-/ng.seed/master/node.sh)
 
-	This will install and use the latest stable version of node, to specify a version edit `~/.bashrc`
+	This will install and use the latest stable version of node into .nave/, to specify a version edit `~/.bashrc`
 
 2. *Goto the directory where you want your application, and install ng.seed*
 
