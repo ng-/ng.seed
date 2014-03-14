@@ -13,7 +13,7 @@ wget https://raw.github.com/isaacs/nave/master/nave.sh
 sudo ln -s $PWD/nave.sh /usr/local/bin/nave
 
 # give yourself permission to run the script
-sudo chmod -R 755 /usr/local/{share/man,bin,lib/node,include/node}
+sudo chmod 755 /usr/local/{share/man,bin,bin/nave,lib/node,include/node}
 
 # starts virtual environment with node & npm
 nave usemain stable
