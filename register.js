@@ -4,6 +4,7 @@
 // ng.seed loads an ng app based on the directory structure
 
 var log = require('ng/logger')
+  , fs  = require('fs')
   , pkg = require('../../package.json')
 
 //Now that recursive, asyncronous load is done, let's syncronously register the modules in ng
@@ -73,9 +74,30 @@ module.exports = function(modules, types)
 
 			for (var i in pkg.ports)
 			{
-				log('listening for '+pkg.ports[i]+' on port '+i)
+				var protocol = pkg.ports[i].require || pkg.ports[i]
 
-				require(pkg.ports[i]).createServer(ng).listen(i)
+				if (pkg.ports[i].require)
+				{
+					if (pkg.ports[i].key)
+					{
+						pkg.ports[i].key = fs.readFileSync(pkg.ports[i].key)
+					}
+
+					if (pkg.ports[i].cert)
+					{
+						pkg.ports[i].cert = fs.readFileSync(pkg.ports[i].cert)
+					}
+
+					require(protocol).createServer(pkg.ports[i], ng).listen(i)
+				}
+				else
+				{
+					require(protocol).createServer(ng).listen(i)
+				}
+
+				log('listening for '+protocol+' on port '+i)
+
+
 			}
 
 			log('Use ctrl-c to run in background\n')

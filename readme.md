@@ -30,7 +30,7 @@ ng.seed aims to make it dead simple to create a modular application using the [n
 
 4. *Start your application*
 
-		node node_modules/myProject <environment>
+		node myProject <environment>
 
 	`<environment>` is available inside your application as `process.env.NODE_ENV` and `process.argv[3]`
 
@@ -108,7 +108,7 @@ Edit your `package.json` if you wish to stay on a particular version. Using goog
 Add or remove ngRoute, ngAnimate, ngCookies, ngSanitize, ngTouch and any other *precompiled* angular modules (i.e., not ng) - such as angular-ui's bootstrap or angular's firebase bindings - to this option. Other configuration options include changing the path and/or prefix of your log files, or changing your application's default protocol/port from  `http port 1080`.
 
 ## run as root
-Don’t install or run nave/node/npm as root because of security vulnerabilities. When not root, the only thing you won’t be able to do is listen on ports less than 1024.  Instead, listen on a port > 1024 (e.g., the default is `1080` for `http` and `1443` for `https`) and use ip-table to forward ports 80 & 443 to the ones your server is actually listening to
+Don’t run node/ng.seed as root because of it could open potential security vulnerabilities. When not root, the only thing you won’t be able to do is listen on ports less than 1024.  Instead, listen on a port > 1024 (e.g., the default is `1080` for `http` and `1443` for `https`) and use ip-table to forward ports 80 & 443 to the ports on which your server is actually listening.
 
 ##views
 In order to work, views require ngRoute to be loaded in `package.json`. ng.seed provide a shortcut to defining routes by parsing the filenames in the `view` folder.  By placing an `.html` file in the `view` folder, ng.seed will know to add that file to $routeProvider as a template.  The route given for that template will be the view's filename - with `$` replaced with `:` since `:` character is not allowed to be used in the filename of many Operating Systems. For example, `myProject/view` may contain a file named `i/am/$a/$route?/that/will/$be*/registered.html` which ng.seed will add as

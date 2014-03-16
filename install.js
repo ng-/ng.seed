@@ -64,8 +64,8 @@ if (pkg.dependencies && pkg.dependencies['ng.seed'])
 					{
 						log.cyan("\n\n*** Installation Completed Successfully ***")
 						log.gray("create or npm [--save] install at least one module into "+name+"/node_modules")
-						log.gray("then simply use 'node "+name+" local/test/live' to start your new application.")
-						log.gray("visit https://npmjs.org/package/ng.seed for detailed instructions and examples.\n\n")
+						log.gray("then simply use 'node "+name+" <env>|stop|restart' to control your application.")
+						log.gray("visit https://github.com/ng-/ng.seed for detailed instructions and examples.\n\n")
 
 						rl.close()
 					})
