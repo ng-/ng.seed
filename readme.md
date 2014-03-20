@@ -227,7 +227,7 @@ For another example, let's see how to use google's cdn for testing & production.
 	"ng":"http://code.angularjs.org/snapshot/angular.js",
 	"ngRoute":"http://code.angularjs.org/snapshot/angular-route.js"
 },
-
+```
 
 #### to
 ```javascript
@@ -242,7 +242,7 @@ For another example, let's see how to use google's cdn for testing & production.
 		},
 		"live":"test"
    },
-
+```
 #### also the same
 ```javascript
 "requires": {
