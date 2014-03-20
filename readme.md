@@ -108,26 +108,20 @@ ng.seed has three type of dependencies:
 Just like `angular` is to angular, `ng` is ng.seed's one & only global variable. `ng` has exactly the same [api as angular](http://docs.angularjs.org/api/ng/function) with your favorite helper methods such as `ng.toJson`, `ng.fromJson`, `ng.isDefined`, etc. In addition, ng.seed has one extra property: `ng.config`.  To learn more about `ng.config`, please see the **config** section of this readme.
 
 ## config
-All config options are contained in your project's `package.json`. which is a version of your application's package.json file modified based on the `<environment>` set when ng.seed is loaded. The config options are available globally as `ng.config`.  If your `package.json` property does not have a property named `<environment>` then the whole property is loaded because ng.seed assumes that the option is constant accross all environments. If `<environment>` property does exist then that property is used for the option.  If `<environment>` property exists and its value is another property, then ng.seed assumes you are referencing that property and loads that one as the option. For example:
+All config options are contained in your project's `package.json`, which is modified based on the `<environment>` set when ng.seed is loaded. The config options are available globally as `ng.config`.
+
+If your `package.json` property does not have a property named `<environment>` then the whole property is loaded because ng.seed assumes that the option is constant accross all environments. If `<environment>` property does exist then that property is used for the option.
+
+If the `<environment>` property exists and its value is another property, then ng.seed assumes you are referencing that property and loads that one as the option. For example:
 
 ```javascript
-//Give the following package.json
+//Given the following package.json
 {
 	"option1": {
 		"iam":"happy"
 		"ur": "sad"
-	},
-
-	"option2": {
-		"local":"happy"
-		"live": "sad"
-	},
-
-	"option3": {
-		"local":"happy"
-		"test":"live"
-		"live": "sad"
-	},
+	}
+}
 
 
 node myProject local -> ng.config =
@@ -136,11 +130,7 @@ node myProject local -> ng.config =
 	{
 		iam:"happy"
 		ur: "sad"
-	},
-
-	option2: "happy"
-
-	option3:"happy",
+	}
 }
 
 node myProject live -> ng.config =
@@ -149,11 +139,7 @@ node myProject live -> ng.config =
 	{
 		iam:"happy"
 		ur: "sad"
-	},
-
-	option2: "sad"
-
-	option3:"sad",
+	}
 }
 
 node myProject test -> ng.config =
@@ -162,15 +148,63 @@ node myProject test -> ng.config =
 	{
 		iam:"happy"
 		ur: "sad"
-	},
+	}
+}
+```
 
+```javascript
+//Given the following package.json
+{
+	"option2": {
+		"local":"happy"
+		"live": "sad"
+	}
+}
+
+node myProject local -> ng.config =
+{
+	option2: "happy"
+}
+
+node myProject live -> ng.config =
+{
+	option2: "sad"
+}
+
+node myProject test -> ng.config =
+{
 	//this option is most likely an error as ng.seed does not know
 	//which value to load when given the environment "test"
 	option2: {
 		"local":"happy"
 		"live": "sad"
-	},
+	}
+}
+```
 
+```javascript
+//Given the following package.json
+{
+	"option3": {
+		"local":"happy"
+		"test":"live"
+		"live": "sad"
+	}
+}
+
+
+node myProject local -> ng.config =
+{
+	option3:"happy"
+}
+
+node myProject live -> ng.config =
+{
+	option3:"sad"
+}
+
+node myProject test -> ng.config =
+{
 	//this one references the live environment
 	option3:"sad",
 }
