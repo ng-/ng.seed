@@ -232,30 +232,30 @@ For another example, let's see how to use google's cdn for testing & production.
 #### to
 ```javascript
 "requires": {
-		"local": {
-			"ng": 	  "../ng.cdn/1.2.6.js",
-			"ngRoute": "../ng.cdn/1.2.0-route.js"
-		},
-		"test": {
-			"ng": 	  "//ajax.googleapis.com/ajax/libs/angularjs/1.2.12/angular.min.js",
-			"ngRoute": "//ajax.googleapis.com/ajax/libs/angularjs/1.2.12/angular-route.min.js"
-		},
-		"live":"test"
-   },
+	"local": {
+		"ng": 	  "../ng.cdn/1.2.6.js",
+		"ngRoute": "../ng.cdn/1.2.0-route.js"
+	},
+	"test": {
+		"ng": 	  "//ajax.googleapis.com/ajax/libs/angularjs/1.2.12/angular.min.js",
+		"ngRoute": "//ajax.googleapis.com/ajax/libs/angularjs/1.2.12/angular-route.min.js"
+	},
+	"live":"test"
+},
 ```
 #### also the same
 ```javascript
 "requires": {
-		"local": {
-			"ng": 	  "../ng.cdn/1.2.6.js",
-			"ngRoute": "../ng.cdn/1.2.0-route.js"
-		},
-		"test": "live"
-		"live": {
-			"ng": 	  "//ajax.googleapis.com/ajax/libs/angularjs/1.2.12/angular.min.js",
-			"ngRoute": "//ajax.googleapis.com/ajax/libs/angularjs/1.2.12/angular-route.min.js"
-		}
-   },
+	"local": {
+		"ng": 	  "../ng.cdn/1.2.6.js",
+		"ngRoute": "../ng.cdn/1.2.0-route.js"
+	},
+	"test": "live"
+	"live": {
+		"ng": 	  "//ajax.googleapis.com/ajax/libs/angularjs/1.2.12/angular.min.js",
+		"ngRoute": "//ajax.googleapis.com/ajax/libs/angularjs/1.2.12/angular-route.min.js"
+	}
+},
 ```
 Other common configuration options include changing the path and/or prefix of your log files, or changing your application's default protocol/port from `http port 1080`.
 
