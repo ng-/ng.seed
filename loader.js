@@ -6,8 +6,6 @@
 
 
 var fs  = require('fs'),
-log     = require('ng/logger'),
-pkg     = require('../../package.json'),
 modules = {},
 depth   = 1,
 types   =
@@ -57,7 +55,8 @@ function load(dir)
 			}
 
 			//If directory is a dependent, add it to the requires of its parent
-			if ('node_modules' == parent)
+			//force ng.prefix in order to load module, so tha we have a namespace
+			if ('node_modules' == parent && 'ng.' == files[i].slice(0, 3))
 			{
 				depth++; load(dir+'/'+files[i]);
 
