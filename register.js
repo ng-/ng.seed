@@ -3,22 +3,22 @@
 // ----------------------------------------------------------------
 // ng.seed loads an ng app based on the directory structure
 
-var log = require('ng/logger')
-  , fs  = require('fs')
-  , pkg = require('../../package.json')
+var log    = require('ng/logger')
+  , fs     = require('fs')
+  , config = ng.config
 
 //Now that recursive, asyncronous load is done, let's syncronously register the modules in ng
 module.exports = function(modules, types)
 {
-	require('ng')(pkg.requires, function(ng)
+	require('ng')(ng.config.requires, function(ng)
 	{
-		//ng is now accessible everywhere!
-		global.ng = ng
+		//extend our global config object with all of ng's methods
+		ng.extend(global.ng, ng)
 
 		//Register our modules
 		for (var i in modules)
 		{
-			var module = ng.module(i, Object.keys(pkg.requires).concat(modules[i]))
+			var module = ng.module(i, Object.keys(config.requires).concat(modules[i]))
 		}
 
 		for (var i in types)
@@ -72,23 +72,23 @@ module.exports = function(modules, types)
 		{
 			log.gray.bold(' in '+process.env.NODE_ENV+' environment')
 
-			for (var i in pkg.ports)
+			for (var i in config.ports)
 			{
-				var protocol = pkg.ports[i].require || pkg.ports[i]
+				var protocol = config.ports[i].use || config.ports[i]
 
-				if (pkg.ports[i].require)
+				if (config.ports[i].use)
 				{
-					if (pkg.ports[i].key)
+					if (config.ports[i].key)
 					{
-						pkg.ports[i].key = fs.readFileSync(pkg.ports[i].key)
+						config.ports[i].key = fs.readFileSync(config.ports[i].key)
 					}
 
-					if (pkg.ports[i].cert)
+					if (config.ports[i].cert)
 					{
-						pkg.ports[i].cert = fs.readFileSync(pkg.ports[i].cert)
+						config.ports[i].cert = fs.readFileSync(config.ports[i].cert)
 					}
 
-					require(protocol).createServer(pkg.ports[i], ng).listen(i)
+					require(protocol).createServer(config.ports[i], ng).listen(i)
 				}
 				else
 				{
@@ -96,8 +96,6 @@ module.exports = function(modules, types)
 				}
 
 				log('listening for '+protocol+' on port '+i)
-
-
 			}
 
 			log('Use ctrl-c to run in background\n')
