@@ -93,22 +93,131 @@ exports.server = function(dependency3, dependency4)
 ```
 
 ## dependencies
-There are two type of dependencies: regular angular modules and ng modules.  To load regular angular modules use the `requires` property in your `package.json` as described in the **config** section of this readme. To use a third-party ng module simply add that module to your application's `node_modules` folder and - if you plan to publish your application - add it as a dependency to your `package.json`.  Easily do both at the same time with the command `npm install myProject --save <dependency>`. If you publish your own project as a dependency, please use the "ng." prefix.  Preserving this namespace is helpful for other developers to discover your project.
+ng.seed has three type of dependencies:
+1. angular modules - precompiled modules such as ngRoute, ngCookies, uiBootstrap
+2. ng.seed modules - npm packages starting with `ng.` that will compile into angular modules
+3. npm packages    - regular npm packages that are `require()` in ng.seed modules
+
+(1) To load regular angular modules set them in the `requires` property in your `package.json`. Although angular's core module `ng` is the only external module required - to get you started quickly - ng.seed loads both the bleeding-edge of `ng` from `http://code.angularjs.org/snapshot/angular.js` and `ngRoute` from `http://code.angularjs.org/snapshot/angular-route.js`. See the **config** section of this readme for an example of how to edit your `package.json` to stay on a particular version. Add or remove ngRoute, ngAnimate, ngCookies, ngSanitize, ngTouch and any other *precompiled* angular modules (i.e., not ng) - such as angular-ui's bootstrap or angular's firebase bindings - to this option.
+
+(2) Use ng.seed modules by simply adding them to your application's `node_modules` folder and - if you plan to publish your application - add them as a dependencies to your `package.json`.  Easily do both at the same time with the command `npm install ng.thirdParty --save <dependency>`.  All ng.seed modules **must** have a name starting with `ng.` or the module will not load. ng.seed enforces this restriction in order to differentiate ng.seed modules from other npm dependencies. If you end up publishing your module, this `ng.` namespace will also help your module be discovered by other developers browsing npm's registry or github.
+
+(3) Any npm package that does not start with `ng.` will not be loaded by ng.seed.  This allows ng.seed modules to `require()` any package within the npm registry as a dependency.  To ensure compatibility, regular npm packages will always be run on the server rather than the client.
+
+## ng global
+Just like `angular` is to angular, `ng` is ng.seed's one & only global variable. `ng` has exactly the same [api as angular](http://docs.angularjs.org/api/ng/function) with your favorite helper methods such as `ng.toJson`, `ng.fromJson`, `ng.isDefined`, etc. In addition, ng.seed has one extra property: `ng.config`.  To learn more about `ng.config`, please see the **config** section of this readme.
 
 ## config
-All config options are contained in your project's `package.json`. Although core angular is the only external module required - to get you started quickly - ng.seed loads both the bleeding-edge of angular from `http://code.angularjs.org/snapshot/angular.js` and angular route from `http://code.angularjs.org/snapshot/angular-route.js`.
+All config options are contained in your project's `package.json`. which is a version of your application's package.json file modified based on the `<environment>` set when ng.seed is loaded. The config options are available globally as `ng.config`.  If your `package.json` property does not have a property named `<environment>` then the whole property is loaded because ng.seed assumes that the option is constant accross all environments. If `<environment>` property does exist then that property is used for the option.  If `<environment>` property exists and its value is another property, then ng.seed assumes you are referencing that property and loads that one as the option. For example:
 
-Edit your `package.json` if you wish to stay on a particular version. Using google's cdn is highly recommended for production. For example
 ```javascript
-	"requires": {
-		"ng": 	  "//ajax.googleapis.com/ajax/libs/angularjs/1.2.12/angular.min.js",
-		"ngRoute": "//ajax.googleapis.com/ajax/libs/angularjs/1.2.12/angular-route.min.js"
-	}
+//Give the following package.json
+{
+	"option1": {
+		"iam":"happy"
+		"ur": "sad"
+	},
+
+	"option2": {
+		"local":"happy"
+		"live": "sad"
+	},
+
+	"option3": {
+		"local":"happy"
+		"test":"live"
+		"live": "sad"
+	},
+
+
+node myProject local -> ng.config =
+{
+	option1:
+	{
+		iam:"happy"
+		ur: "sad"
+	},
+
+	option2: "happy"
+
+	option3:"happy",
+}
+
+node myProject live -> ng.config =
+{
+	option1:
+	{
+		iam:"happy"
+		ur: "sad"
+	},
+
+	option2: "sad"
+
+	option3:"sad",
+}
+
+node myProject test -> ng.config =
+{
+	option1:
+	{
+		iam:"happy"
+		ur: "sad"
+	},
+
+	//this option is most likely an error as ng.seed does not know
+	//which value to load when given the environment "test"
+	option2: {
+		"local":"happy"
+		"live": "sad"
+	},
+
+	//this one references the live environment
+	option3:"sad",
+}
 ```
-Add or remove ngRoute, ngAnimate, ngCookies, ngSanitize, ngTouch and any other *precompiled* angular modules (i.e., not ng) - such as angular-ui's bootstrap or angular's firebase bindings - to this option. Other configuration options include changing the path and/or prefix of your log files, or changing your application's default protocol/port from  `http port 1080`.
+
+For another example, let's see how to use google's cdn for testing & production. In `package.json` change:
+
+#### from
+```javascript
+"requires": {
+	"ng":"http://code.angularjs.org/snapshot/angular.js",
+	"ngRoute":"http://code.angularjs.org/snapshot/angular-route.js"
+},
+
+
+#### to
+```javascript
+"requires": {
+		"local": {
+			"ng": 	  "../ng.cdn/1.2.6.js",
+			"ngRoute": "../ng.cdn/1.2.0-route.js"
+		},
+		"test": {
+			"ng": 	  "//ajax.googleapis.com/ajax/libs/angularjs/1.2.12/angular.min.js",
+			"ngRoute": "//ajax.googleapis.com/ajax/libs/angularjs/1.2.12/angular-route.min.js"
+		},
+		"live":"test"
+   },
+
+#### also the same
+```javascript
+"requires": {
+		"local": {
+			"ng": 	  "../ng.cdn/1.2.6.js",
+			"ngRoute": "../ng.cdn/1.2.0-route.js"
+		},
+		"test": "live"
+		"live": {
+			"ng": 	  "//ajax.googleapis.com/ajax/libs/angularjs/1.2.12/angular.min.js",
+			"ngRoute": "//ajax.googleapis.com/ajax/libs/angularjs/1.2.12/angular-route.min.js"
+		}
+   },
+```
+Other common configuration options include changing the path and/or prefix of your log files, or changing your application's default protocol/port from `http port 1080`.
 
 ## run as root
-Don’t run node/ng.seed as root because of it could open potential security vulnerabilities. When not root, the only thing you won’t be able to do is listen on ports less than 1024.  Instead, listen on a port > 1024 (e.g., the default is `1080` for `http` and `1443` for `https`) and use ip-table to forward ports 80 & 443 to the ports on which your server is actually listening.
+Don’t run node/ng.seed as root because of it could open potential security vulnerabilities. When not root, the only thing you won’t be able to do is listen on ports less than 1024.  Instead, listen on a port > 1024 (e.g., the default is `1080` for `http`) and use ip-table to forward ports 80 & 443 to the ports on which your server is actually listening.
 
 ##views
 In order to work, views require ngRoute to be loaded in `package.json`. ng.seed provide a shortcut to defining routes by parsing the filenames in the `view` folder.  By placing an `.html` file in the `view` folder, ng.seed will know to add that file to $routeProvider as a template.  The route given for that template will be the view's filename - with `$` replaced with `:` since `:` character is not allowed to be used in the filename of many Operating Systems. For example, `myProject/view` may contain a file named `i/am/$a/$route?/that/will/$be*/registered.html` which ng.seed will add as
@@ -122,6 +231,9 @@ Since view's have no way of registering a controller with $routeProvider directl
 
 ## changelog
 #### 0.0.0-rc2
+- Environment based config added
+- Require "ng." prefix for ng.seed modules
+- Port api enables passing options to createServer
 - Added automatic daemon functionality
 - Added log file config to package.json
 - Refactored code into separate files
@@ -130,11 +242,10 @@ Since view's have no way of registering a controller with $routeProvider directl
 - Initial commit
 
 ## todos
-- Environment based Config
-- Documentation: explain Global ng Var
-- Duplication detection before overwrite
+- Feel free to email adam.kircher@gmail.com with suggestions!
+- Duplication detection before overwrite?
 - Use fs.watch to do automatic reloads
-- Use the cluster module to run multi-thread
+- Use the cluster module to run multi-thread (w/o redundant stdin/stdout?)
 
 ## related projects
 - [ng](https://github.com/ng-/ng): angular reimagined
