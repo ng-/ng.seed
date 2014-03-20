@@ -114,6 +114,7 @@ If your `package.json` property does not have a property named `<environment>` t
 
 If the `<environment>` property exists and its value is another property, then ng.seed assumes you are referencing that property and loads that one as the option. For example:
 
+Environment based properties are not set, so all environments are identical
 ```javascript
 //Given the following package.json
 {
@@ -123,8 +124,8 @@ If the `<environment>` property exists and its value is another property, then n
 	}
 }
 
-
-node myProject local -> ng.config =
+//node myProject local
+ng.config =
 {
 	option1:
 	{
@@ -133,7 +134,8 @@ node myProject local -> ng.config =
 	}
 }
 
-node myProject live -> ng.config =
+//node myProject live
+ng.config =
 {
 	option1:
 	{
@@ -142,7 +144,8 @@ node myProject live -> ng.config =
 	}
 }
 
-node myProject test -> ng.config =
+//node myProject test
+ng.config =
 {
 	option1:
 	{
@@ -152,6 +155,7 @@ node myProject test -> ng.config =
 }
 ```
 
+Some environmental config options are set
 ```javascript
 //Given the following package.json
 {
@@ -161,17 +165,20 @@ node myProject test -> ng.config =
 	}
 }
 
-node myProject local -> ng.config =
+//node myProject local
+ng.config =
 {
 	option2: "happy"
 }
 
-node myProject live -> ng.config =
+//node myProject live
+ng.config =
 {
 	option2: "sad"
 }
 
-node myProject test -> ng.config =
+//node myProject test
+ng.config =
 {
 	//this option is most likely an error as ng.seed does not know
 	//which value to load when given the environment "test"
@@ -181,7 +188,7 @@ node myProject test -> ng.config =
 	}
 }
 ```
-
+All environmental configs are set (one with a reference)
 ```javascript
 //Given the following package.json
 {
@@ -192,18 +199,20 @@ node myProject test -> ng.config =
 	}
 }
 
-
-node myProject local -> ng.config =
+//node myProject local
+ng.config =
 {
 	option3:"happy"
 }
 
-node myProject live -> ng.config =
+//node myProject live
+ng.config =
 {
 	option3:"sad"
 }
 
-node myProject test -> ng.config =
+//node myProject test
+ng.config =
 {
 	//this one references the live environment
 	option3:"sad",
